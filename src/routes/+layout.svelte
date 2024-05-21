@@ -7,6 +7,7 @@
 <header>
 	<a href="/" class:current={currentPath === '/'}>Eintragen</a>
 	<a href="/recipes" class:current={currentPath === '/recipes'}>Gerichte</a>
+	<a href="/ingredients" class:current={currentPath === '/ingredients'}>Zutaten</a>
 </header>
 
 <slot />
@@ -21,6 +22,10 @@
 	:global(h1) {
 		font-size: 1.5rem;
 		margin-top: 0.6rem;
+	}
+
+	:global(*) {
+		box-sizing: border-box;
 	}
 
 	header {

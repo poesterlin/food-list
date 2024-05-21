@@ -28,7 +28,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         .leftJoin(foodsTable, eq(ingredientsTable.food_id, foodsTable.id))
         .orderBy(foodsTable.name);
 
-    return { recipe, ingredients };
+    const allIngredients = await db
+        .select()
+        .from(foodsTable)
+        .orderBy(foodsTable.name);
+
+    return { recipe, ingredients, allIngredients };
 };
 
 export const actions: Actions = {
@@ -75,6 +80,16 @@ export const actions: Actions = {
         });
 
         redirect(303, '/recipes');
+    },
+    add: async ({ params, locals, request }) => {
+        const id = z.coerce.number().parse(params.id);
+        const form = await request.formData();
+
+        const db = locals.db;
+        const foodId = z.coerce.number().parse(form.get('food_id'));
+
+        await db.insert(ingredientsTable).values({ recipe_id: id, food_id: foodId }).execute();
+        redirect(303, `/recipes/${id}`);
     }
 };
 

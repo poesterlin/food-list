@@ -8,7 +8,7 @@
 	<ul>
 		{#each data.recipes as recipe}
 			<li>
-				<a href="recipes/{recipe.id}">
+				<a href="/recipes/{recipe.id}">
 					<article>
 						<h2>{recipe.name}</h2>
 						<p>{formatDate(recipe.date)}</p>
