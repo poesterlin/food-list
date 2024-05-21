@@ -1,16 +1,17 @@
 CREATE TABLE IF NOT EXISTS "foods" (
-	"id" text PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"category" text NOT NULL,
-	"name" text NOT NULL
+	"name" text NOT NULL,
+	"allowed" boolean DEFAULT true NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ingredients" (
-	"recipe_id" text NOT NULL,
-	"food_id" text NOT NULL
+	"recipe_id" integer NOT NULL,
+	"food_id" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "recipes" (
-	"id" text PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"date" date DEFAULT now() NOT NULL
 );

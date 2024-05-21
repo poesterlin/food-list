@@ -1,5 +1,5 @@
 {
-  "id": "3b7d7aa1-78f8-46d1-9115-7e1e1f4206d2",
+  "id": "fa6e55c4-7f13-44fb-b5e6-119d473f782d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
@@ -25,6 +25,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "allowed": {
+          "name": "allowed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         }
       },
       "indexes": {},
@@ -38,13 +45,13 @@
       "columns": {
         "recipe_id": {
           "name": "recipe_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "food_id": {
           "name": "food_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -87,7 +94,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
