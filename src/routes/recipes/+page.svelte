@@ -37,27 +37,32 @@
 	ul {
 		list-style: none;
 		padding: 0;
-        margin: 0;
+		margin: 0;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		grid-template-rows: auto;
 		gap: 1rem;
 	}
 
 	li {
 		margin-bottom: 1rem;
+
+		display: grid;
+		grid-template-columns: subgrid;
 	}
 
 	a {
 		text-decoration: none;
 		color: black;
+		height: 100%;
+		border: 1px solid #ccc;
 	}
 
-	a:hover article {
+	a:hover {
 		background-color: #f8f9fa;
 	}
 
 	article {
-		border: 1px solid #ccc;
 		border-radius: 0.25rem;
 		padding: 1rem;
 	}
