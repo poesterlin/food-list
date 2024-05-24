@@ -1,10 +1,10 @@
-import { MINIO_KEY, MINIO_SECRET, MINIO_URL, MINIO_BUCKET } from '$env/static/private';
+import { MINIO_KEY, MINIO_SECRET, MINIO_URL, MINIO_BUCKET, MINIO_PORT } from '$env/static/private';
 import { Client } from "minio";
 import sharp from 'sharp';
 
 const client = new Client({
     endPoint: MINIO_URL,
-    port: 9090,
+    port: MINIO_PORT,
     useSSL: false,
     accessKey: MINIO_KEY,
     secretKey: MINIO_SECRET,
