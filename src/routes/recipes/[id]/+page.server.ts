@@ -3,6 +3,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
+import { uploadImage } from '$lib/s3';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const id = z.coerce.number().parse(params.id);
@@ -89,6 +90,20 @@ export const actions: Actions = {
         const foodId = z.coerce.number().parse(form.get('food_id'));
 
         await db.insert(ingredientsTable).values({ recipe_id: id, food_id: foodId }).execute();
+        redirect(303, `/recipes/${id}`);
+    },
+    uploadImage: async ({ params, locals, request }) => {
+        const id = z.coerce.number().parse(params.id);
+        const form = await request.formData();
+        const img = form.getAll('image')[0];
+
+        if (!img || !(img instanceof File)) {
+            error(400, "Bad request");
+        }
+
+        const db = locals.db;
+        const imgId = await uploadImage(img);
+        await db.update(recipesTable).set({ imgId }).where(eq(recipesTable.id, id));
         redirect(303, `/recipes/${id}`);
     }
 };

@@ -9,18 +9,15 @@
 		{#each data.recipes as recipe}
 			<li>
 				<a href="/recipes/{recipe.id}">
-					<article>
+					<div>
 						<h2>{recipe.name}</h2>
 						<p>{formatDate(recipe.date)}</p>
-						<div>
-							{#each recipe.ingredients.filter((i) => i.name).slice(0, 3) as ingredient}
-								<span>{ingredient.name}</span>
-							{/each}
-							{#if recipe.ingredients.length > 3}
-								<span>...</span>
-							{/if}
-						</div>
-					</article>
+					</div>
+					{#if recipe.imgId}
+						<img src="/image/{recipe.id}" alt={recipe.name} />
+					{:else}
+						<img src="/placeholder.svg" alt="Kein Bild vorhanden" />
+					{/if}
 				</a>
 			</li>
 		{:else}
@@ -39,32 +36,41 @@
 		padding: 0;
 		margin: 0;
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		grid-template-rows: auto;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 		gap: 1rem;
 	}
 
-	li {
-		margin-bottom: 1rem;
-
-		display: grid;
-		grid-template-columns: subgrid;
+	li,
+	a {
+		height: 320px;
 	}
 
 	a {
+		display: grid;
+		grid-template-rows: 1fr auto;
 		text-decoration: none;
 		color: black;
 		height: 100%;
 		border: 1px solid #ccc;
-	}
-
-	a:hover {
-		background-color: #f8f9fa;
-	}
-
-	article {
 		border-radius: 0.25rem;
+		position: relative;
+		margin-bottom: 1rem;
+	}
+
+	div {
+		background-color: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(5px);
+		grid-row: 2 / 3;
 		padding: 1rem;
+	}
+
+	img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		object-fit: cover;
 	}
 
 	h2 {
@@ -74,10 +80,6 @@
 
 	p {
 		margin: 0.5rem 0;
-	}
-
-	div {
-		display: flex;
-		justify-content: space-between;
+		text-align: center;
 	}
 </style>

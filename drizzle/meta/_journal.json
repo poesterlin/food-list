@@ -8,6 +8,13 @@
       "when": 1716297029885,
       "tag": "0000_bouncy_doomsday",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1716547097438,
+      "tag": "0001_rainy_karma",
+      "breakpoints": true
     }
   ]
 }
