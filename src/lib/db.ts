@@ -1,6 +1,6 @@
 import type { ExtractTablesWithRelations } from "drizzle-orm";
 import { sql } from "drizzle-orm";
-import { serial, boolean, date, pgTable, text, type PgDatabase, integer, uuid } from "drizzle-orm/pg-core";
+import { serial, boolean, date, pgTable, text, type PgDatabase, integer } from "drizzle-orm/pg-core";
 import type { PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 
 export type DB = PgDatabase<PostgresJsQueryResultHKT, Record<string, never>, ExtractTablesWithRelations<Record<string, never>>>;
