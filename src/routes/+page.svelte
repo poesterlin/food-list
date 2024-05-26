@@ -1,5 +1,7 @@
 <script lang="ts">
 	export let data;
+
+	let value: Record<string, boolean> = {};
 </script>
 
 <main>
@@ -8,6 +10,19 @@
 		<input type="text" placeholder="Name" name="name" id="name" />
 
 		<h2>Zutaten:</h2>
+		<details>
+			<summary>Favouriten</summary>
+			<ul>
+				{#each data.favorites as food}
+					<li>
+						<label>
+							<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} />
+							{food.name}
+						</label>
+					</li>
+				{/each}
+			</ul>
+		</details>
 		{#each data.categories as category}
 			<details>
 				<summary>{category.name}</summary>
@@ -15,7 +30,7 @@
 					{#each category.list as food}
 						<li>
 							<label>
-								<input type="checkbox" name="food_{food.id}" />
+								<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} />
 								{food.name}
 							</label>
 						</li>

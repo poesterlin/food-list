@@ -8,6 +8,7 @@
 	<a href="/" class:current={currentPath === '/'}>Eintragen</a>
 	<a href="/recipes" class:current={currentPath === '/recipes'}>Gerichte</a>
 	<a href="/ingredients" class:current={currentPath === '/ingredients'}>Zutaten</a>
+	<a href="/analysis" class:current={currentPath === '/analysis'}>Auswertung</a>
 </header>
 
 <slot />

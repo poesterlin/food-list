@@ -1,5 +1,5 @@
 import { foodsTable, ingredientsTable, recipesTable } from "$lib/db";
-import { sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 import { error, redirect } from "@sveltejs/kit";
@@ -16,7 +16,19 @@ export const load: PageServerLoad = async ({ locals }) => {
         .groupBy(foodsTable.category)
         .orderBy(foodsTable.category);
 
-    return { categories };
+    const favorites = await db
+        .select({
+            count: sql`count(*)`,
+            id: foodsTable.id,
+            name: foodsTable.name,
+        })
+        .from(ingredientsTable)
+        .rightJoin(foodsTable, eq(ingredientsTable.food_id, foodsTable.id))
+        .groupBy(foodsTable.id)
+        .orderBy(desc(sql`count`))
+        .limit(8);
+
+    return { categories, favorites };
 };
 
 export const actions: Actions = {
