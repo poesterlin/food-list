@@ -48,18 +48,16 @@ export const actions: Actions = {
 
             const entries = Array.from(form.entries());
 
-            const ingredients = entries
+            const foodIndices: number[] = entries
                 .filter(([key, value]) => key.startsWith('food_') && value === 'on')
-                .map(([key]) => {
-                    const food_id = parseInt(key.replace('food_', ''));
-                    return { recipe_id, food_id };
-                });
+                .map(([key]) => parseInt(key.replace('food_', '')));
+
+            const uniqueIngredients = new Set(foodIndices);
+            const ingredients = Array.from(uniqueIngredients.values()).map(food_id => ({ food_id, recipe_id }));
 
             if (ingredients.length === 0) {
                 error(400, 'No ingredients selected');
             }
-
-            console.log(ingredients);
 
             await db.insert(ingredientsTable).values(ingredients).execute();
             return recipe_id;

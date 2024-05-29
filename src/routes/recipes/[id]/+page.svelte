@@ -16,6 +16,9 @@
 	<header>
 		{#if data.recipe.imgId}
 			<img src="/image/{data.recipe.id}" alt={data.recipe.name} />
+			<form id="delete-img" action="?/deleteImage" method="post">
+				<button>x</button>
+			</form>
 		{:else}
 			<img src="/placeholder.svg" alt="Kein Bild vorhanden" />
 		{/if}
@@ -109,6 +112,23 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+	}
+
+	header form#delete-img {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+	}
+
+	header form#delete-img button {
+		color: white;
+		border: 1px solid red;
+		border-radius: 0.25rem;
+		padding: 0.5rem 1rem;
+	}
+
+	#delete-img button:hover {
+		background-color: red;
 	}
 
 	li {

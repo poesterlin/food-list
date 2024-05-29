@@ -33,3 +33,7 @@ export async function getImageResponseStream(id: string) {
         }
     })
 }
+
+export async function deleteImage(id: string) {
+    await client.removeObject(MINIO_BUCKET, id);
+}

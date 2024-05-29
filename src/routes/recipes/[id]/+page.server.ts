@@ -3,7 +3,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
-import { uploadImage } from '$lib/s3';
+import { deleteImage, uploadImage } from '$lib/s3';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const id = z.coerce.number().parse(params.id);
@@ -105,6 +105,24 @@ export const actions: Actions = {
         const imgId = await uploadImage(img);
         await db.update(recipesTable).set({ imgId }).where(eq(recipesTable.id, id));
         redirect(303, `/recipes/${id}`);
-    }
+    },
+    deleteImage: async ({ params, locals }) => {
+        const id = z.coerce.number().parse(params.id);
+
+        const db = locals.db;
+        const [recipe] = await db.select().from(recipesTable).where(eq(recipesTable.id, id)).limit(1);
+
+        if (!recipe) {
+            error(404, 'Recipe not found');
+        }
+
+        if (!recipe.imgId) {
+            error(400, 'No image to delete');
+        }
+
+        await deleteImage(recipe.imgId);
+        await db.update(recipesTable).set({ imgId: null }).where(eq(recipesTable.id, id));
+        redirect(303, `/recipes/${id}`);
+    },
 };
 
