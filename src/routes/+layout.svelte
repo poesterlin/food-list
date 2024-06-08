@@ -2,13 +2,18 @@
 	import { page } from '$app/stores';
 
 	$: currentPath = $page.route.id;
+	export let data;
 </script>
 
 <header>
-	<a href="/" class:current={currentPath === '/'}>Eintragen</a>
-	<a href="/recipes" class:current={currentPath === '/recipes'}>Gerichte</a>
-	<a href="/ingredients" class:current={currentPath === '/ingredients'}>Zutaten</a>
-	<a href="/analysis" class:current={currentPath === '/analysis'}>Auswertung</a>
+	<nav>
+		<a href="/" class:current={currentPath === '/'}>Eintragen</a>
+		<a href="/recipes" class:current={currentPath === '/recipes'}>Gerichte</a>
+		<a href="/ingredients" class:current={currentPath === '/ingredients'}>Zutaten</a>
+		<a href="/analysis" class:current={currentPath === '/analysis'}>Auswertung</a>
+	</nav>
+
+	<b>Tag {data.daysSince}!</b>
 </header>
 
 <slot />
@@ -34,6 +39,7 @@
 		padding: 1rem;
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		gap: 1rem;
 	}
 
