@@ -1,85 +1,53 @@
 <script lang="ts">
-	import { formatDate } from '$lib/date-helper.js';
+	import { navigating } from '$app/stores';
+	import PhotoList from '$lib/PhotoList.svelte';
 
 	export let data;
+
+	let list: PhotoList;
+	let canRestore = false;
+
+	$: if ($navigating) {
+		canRestore = $navigating.type === 'popstate';
+	}
+
+	export const snapshot = {
+		capture: () => ({
+			data,
+			scroller: list?.capture()
+		}),
+		restore: (values) => {
+			if (!canRestore) return;
+
+			data.photos = values.data.photos;
+			data.next = values.data.next;
+
+			if (values.scroller) {
+				list.restore(values.scroller);
+			}
+		}
+	};
 </script>
 
 <main>
-	<ul>
-		{#each data.recipes as recipe}
-			<li>
-				<a href="/recipes/{recipe.id}">
-					<div>
-						<h2>{recipe.name}</h2>
-						<p>{formatDate(recipe.date)}</p>
-					</div>
-					{#if recipe.imgId}
-						<img src="/image/{recipe.id}" alt={recipe.name} />
-					{:else}
-						<img src="/placeholder.svg" alt="Kein Bild vorhanden" />
-					{/if}
-				</a>
-			</li>
-		{:else}
-			<p>Keine Rezepte vorhanden</p>
-		{/each}
-	</ul>
+	<PhotoList
+		bind:this={list}
+		endpoint="/api/recipes"
+		recipes={data.recipes}
+		next={data.next}
+		on:loaded={(e) => {
+			data.recipes = [...data.recipes, ...e.detail.recipes];
+			data.next = e.detail.next;
+		}}
+	></PhotoList>
 </main>
 
 <style>
 	main {
-		padding: 1.7rem;
-	}
-
-	ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: 1rem;
-	}
-
-	li,
-	a {
-		height: 320px;
-	}
-
-	a {
-		display: grid;
-		grid-template-rows: 1fr auto;
-		text-decoration: none;
-		color: black;
-		height: 100%;
-		border: 1px solid #ccc;
-		border-radius: 0.25rem;
-		position: relative;
-		margin-bottom: 1rem;
-	}
-
-	div {
-		background-color: rgba(255, 255, 255, 0.5);
-		backdrop-filter: blur(5px);
-		grid-row: 2 / 3;
-		padding: 1rem;
-	}
-
-	img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		object-fit: cover;
-	}
-
-	h2 {
-		margin: 0;
-		text-align: center;
-	}
-
-	p {
-		margin: 0.5rem 0;
-		text-align: center;
+		position: fixed;
+		width: 100vw;
+		height: calc(100dvh - 50px);
+		left: 0;
+		top: 50px;
 	}
 </style>

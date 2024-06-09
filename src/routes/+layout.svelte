@@ -40,7 +40,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+	}
+
+	nav {
+		display: flex;
+		gap: 2%;
 	}
 
 	a {
