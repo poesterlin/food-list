@@ -6,7 +6,7 @@ import { desc, eq, sql } from 'drizzle-orm';
 
 export const GET: RequestHandler = async ({ locals, url }) => {
 	const params = url.searchParams as URLSearchParams;
-	const limit = Math.max(z.coerce.number().default(10).parse(params.get('limit')), 10);
+	const limit = Math.max(z.coerce.number().default(10).parse(params.get('limit')), 50);
 	const offset = z.coerce.number().default(0).parse(params.get('offset'));
 
 	const db = locals.db;
