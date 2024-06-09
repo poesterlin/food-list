@@ -1,13 +1,31 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+
 	export let data;
+	export let form;
 
 	let value: Record<string, boolean> = {};
+
+	if (form?.uniqueIngredients) {
+		form.uniqueIngredients.forEach((id) => {
+			value[id] = true;
+		});
+	}
+
+	function getTodayDateValue() {
+		return new Date().toISOString().split('T')[0];
+	}
 </script>
 
 <main>
-	<form method="post">
+	<form method="post" use:enhance>
 		<label for="name"><h1>Gericht</h1></label>
-		<input type="text" placeholder="Name" name="name" id="name" />
+		<input type="text" placeholder="Name" name="name" id="name" value={form?.name ?? ''} />
+		<input type="date" name="date" id="date" value={form?.date ?? getTodayDateValue()} />
+
+		{#if form?.error}
+			<p class="error">{form.error}</p>
+		{/if}
 
 		<h2>Zutaten:</h2>
 		<details>
@@ -50,6 +68,26 @@
 		align-items: center;
 	}
 
+	form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	label {
+		width: 100%;
+	}
+
+	input[type='text'],
+	input[type='date'] {
+		width: 100%;
+		padding: 0.5rem;
+		margin: 0.5rem 0;
+	}
+
+	input[type='checkbox'] {
+		margin-right: 0.5rem;
+	}
+
 	details {
 		display: flex;
 		flex-direction: column;
@@ -65,6 +103,12 @@
 		padding: 0;
 	}
 
+	li {
+		display: flex;
+		align-items: center;
+		margin-bottom: 0.1rem;
+	}
+
 	button {
 		margin-top: 3rem;
 		width: 100%;
@@ -74,5 +118,9 @@
 		border-radius: 0.25rem;
 		padding: 0.5rem 1rem;
 		cursor: pointer;
+	}
+
+	.error {
+		color: red;
 	}
 </style>
