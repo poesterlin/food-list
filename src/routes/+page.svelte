@@ -47,7 +47,7 @@
 				<ul>
 					{#each category.list as food}
 						<li>
-							<label>
+							<label class:risky={!food.allowed}>
 								<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} />
 								{food.name}
 							</label>
@@ -122,5 +122,9 @@
 
 	.error {
 		color: red;
+	}
+
+	.risky {
+		color: rgb(241, 157, 0);
 	}
 </style>

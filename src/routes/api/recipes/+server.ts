@@ -18,8 +18,8 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			date: recipesTable.date,
 			imgId: recipesTable.imgId,
 			ingredients: sql<
-				{ id: number; name: string }[]
-			>`json_agg(json_build_object('id', ${ingredientsTable.food_id}, 'name', ${foodsTable.name}))`.as(
+				{ id: number; name: string, allowed: boolean }[]
+			>`json_agg(json_build_object('id', ${ingredientsTable.food_id}, 'name', ${foodsTable.name}, 'allowed', ${foodsTable.allowed}))`.as(
 				'ingredients'
 			)
 		})

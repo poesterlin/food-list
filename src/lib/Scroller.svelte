@@ -1,7 +1,7 @@
-<script lang="ts">
+<script lang="ts" generics="T">
 	import { createEventDispatcher, onMount, tick } from 'svelte';
 
-	export let items: any[];
+	export let items: T[];
 
 	export function capture() {
 		const scroll = scroller.scrollTop;

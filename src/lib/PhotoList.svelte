@@ -5,7 +5,15 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Recipe } from './db';
 
-	export let recipes: Recipe[];
+	type RecipeWithIngredients = Recipe & {
+		ingredients: {
+			id: number;
+			name: string;
+			allowed: boolean;
+		}[];
+	};
+
+	export let recipes: RecipeWithIngredients[];
 	export let next: string | null;
 	export let endpoint: string;
 
@@ -19,7 +27,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let scroller: Scroller;
+	let scroller: Scroller<RecipeWithIngredients>;
 	let loading = false;
 </script>
 
@@ -39,7 +47,7 @@
 	}}
 >
 	<div slot="item" let:item let:i>
-		<a href="/recipes/{item.id}">
+		<a href="/recipes/{item.id}" class:risky={item.ingredients.some((ing) => !ing.allowed)}>
 			<div>
 				<h2>{item.name}</h2>
 				<p>{formatDate(item.date)}</p>
@@ -75,7 +83,6 @@
 		border: 1px solid #ccc;
 		border-radius: 0.25rem;
 		position: relative;
-		margin-bottom: 1rem;
 		width: min(100%, 400px);
 		margin: auto;
 	}
@@ -115,5 +122,11 @@
 	p {
 		margin: 0.5rem 0;
 		text-align: center;
+	}
+
+	a:not(#next).risky {
+		background-color: rgba(255, 217, 48, 0.085);
+		border: 2px solid;
+		border-image: conic-gradient(red, yellow, red, yellow, red, yellow, red) 1;
 	}
 </style>
