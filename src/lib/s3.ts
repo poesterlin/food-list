@@ -5,9 +5,9 @@ import sharp from 'sharp';
 const client = new Client({
 	endPoint: MINIO_URL,
 	port: parseInt(MINIO_PORT),
-	useSSL: false,
 	accessKey: MINIO_KEY,
-	secretKey: MINIO_SECRET
+	secretKey: MINIO_SECRET,
+	useSSL: false,
 });
 
 export async function uploadImage(file: File) {

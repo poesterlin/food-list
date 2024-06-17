@@ -1,5 +1,6 @@
 import type { ExtractTablesWithRelations } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
+import { int } from 'drizzle-orm/mysql-core';
 import {
 	serial,
 	boolean,
@@ -43,3 +44,22 @@ export const ingredientsTable = pgTable('ingredients', {
 });
 
 export type Recipe = typeof recipesTable.$inferSelect;
+
+export const insightsTable = pgTable('insights', {
+	id: serial('id').primaryKey().notNull(),
+	date: date('date')
+		.notNull()
+		.default(sql`now()`),
+	symptoms: integer('symptoms').array().notNull(),
+});
+
+export type Insight = typeof insightsTable.$inferSelect;
+
+export const iconsTable = pgTable('icons', {
+	id: serial('id').primaryKey().notNull(),
+	name: text('name').notNull(),
+	url: text('url').notNull(),
+	category: text('category').notNull(),
+});
+
+export type Icon = typeof iconsTable.$inferSelect;

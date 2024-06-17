@@ -11,6 +11,7 @@
 		<a href="/recipes" class:current={currentPath === '/recipes'}>Gerichte</a>
 		<a href="/ingredients" class:current={currentPath === '/ingredients'}>Zutaten</a>
 		<a href="/analysis" class:current={currentPath === '/analysis'}>Auswertung</a>
+		<a href="insights" class:current={currentPath === '/insights'}>Erkenntnisse</a>
 	</nav>
 
 	<b>Tag {data.daysSince}!</b>
