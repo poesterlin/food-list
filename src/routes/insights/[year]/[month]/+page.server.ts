@@ -1,25 +1,54 @@
 import { iconsTable, insightsTable, type Icon } from "$lib/db";
-import { desc, eq, sql } from "drizzle-orm";
-import type { PageServerLoad } from "./$types";
+import { mod } from '$lib/math';
 import { fail, type Actions } from "@sveltejs/kit";
+import { isToday } from 'date-fns';
+import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
+import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
+    const { month, year } = z.object({
+        month: z.coerce.number().int().min(1).max(12),
+        year: z.coerce.number().int().min(2020)
+    }).parse(params);
+
     const db = locals.db;
+    const icons = await db
+        .select({
+            category: iconsTable.category,
+            list: sql<Icon[]>`json_agg(icons order by ${iconsTable.name} desc)`.as('list')
+        })
+        .from(iconsTable)
+        .groupBy(iconsTable.category);
+
     const entries = await db
         .select()
         .from(insightsTable)
         .orderBy(desc(insightsTable.date))
 
-    const icons = await db
-        .select({
-            category: iconsTable.category,
-            list: sql<Icon[]>`json_agg(icons order by ${iconsTable.name})`.as('list')
-        })
-        .from(iconsTable)
-        .groupBy(iconsTable.category);
+    const map = new Map(entries.map((e) => [new Date(e.date).toDateString(), e]));
+    const nrDays = new Date(year, month, 0).getDate();
+    const days = new Array(nrDays)
+        .fill(undefined)
+        .map((_, day) => new Date(year, month - 1, day + 1))
+        .map((d, i) => {
+            const key = d.toDateString();
+            const result = map.get(key);
+            return {
+                date: i + 1,
+                symptoms: result?.symptoms ?? [],
+                id: result?.id,
+                today: isToday(d) ? true : undefined
+            };
+        });
 
-    return { entries, icons };
+    const firstDay = new Date(year, month - 1, 1).getDay();
+
+    return {
+        icons,
+        days,
+        offset: mod(firstDay - 1, 7)
+    };
 };
 
 export const actions: Actions = {
@@ -33,10 +62,8 @@ export const actions: Actions = {
             .filter(([key, value]) => key.startsWith('icon_') && value === 'on')
             .map(([key]) => parseInt(key.replace('icon_', '')));
 
-        const uniqueIcons = Array.from(new Set(iconsIds).values());
-
         if (!parsedDate.success) {
-            return fail(400, { error: 'Invalid date', date: '', uniqueIcons });
+            return fail(400, { error: 'Invalid date', date: '', iconsIds });
         }
         const date = parsedDate.data;
 
@@ -58,7 +85,7 @@ export const actions: Actions = {
             .insert(insightsTable)
             .values({
                 date: date.toISOString(),
-                symptoms: uniqueIcons,
+                symptoms: iconsIds
             })
     },
 
