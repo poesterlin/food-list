@@ -75,14 +75,18 @@
 			<div class="grey mobile-hide" />
 		{/each}
 		{#each data.days as day}
-			<div id="day" class:today={day.today} class:mobile-hide={day.symptoms.length === 0}>
+			<div id="day" class:today={day.today} class:mobile-hide={day.symptoms === undefined}>
 				<b>{day.date}</b>
 				<div class="symptoms">
-					{#each day.symptoms as e}
-						<img class="grid-img" src="/image/icons/{e}" alt="icon"/>
-					{/each}
+					{#if day.symptoms}
+						{#each day.symptoms as e}
+							<img class="grid-img" src="/image/icons/{e}" alt="icon" />
+						{:else}
+							<p class="no-symptoms">Keine Symptome 🥳</p>
+						{/each}
+					{/if}
 				</div>
-				{#if day.symptoms.length > 0}
+				{#if day.symptoms !== undefined}
 					<form action="?/del" method="post">
 						<input type="hidden" name="id" value={day.id} hidden />
 						<button class="clear-btn" type="submit"> &times; </button>
@@ -261,5 +265,12 @@
 		width: 50px;
 		height: 50px;
 		object-fit: contain;
+	}
+
+	.no-symptoms {
+		color: white;
+		text-align: center;
+		width: 100%;
+		grid-column: 1 / -1;
 	}
 </style>

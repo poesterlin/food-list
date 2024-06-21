@@ -34,9 +34,10 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         .map((d, i) => {
             const key = d.toDateString();
             const result = map.get(key);
+            const hasResult = !!result;
             return {
                 date: i + 1,
-                symptoms: result?.symptoms ?? [],
+                symptoms: hasResult ? result?.symptoms : undefined,
                 id: result?.id,
                 today: isToday(d) ? true : undefined
             };
