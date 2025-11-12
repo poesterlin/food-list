@@ -3,11 +3,17 @@
 	import { formatDate } from '$lib/date-helper.js';
 	import Modal from '$lib/Modal.svelte';
 	import ImageUploadModal from '$lib/ImageUploadModal.svelte';
+	import ConfirmationModal from '$lib/ConfirmationModal.svelte';
 
 	export let data;
 
 	let isAddIngredientModalOpen = false;
 	let isImageUploadModalOpen = false;
+	let isDeleteRecipeModalOpen = false;
+	let isDeleteImageModalOpen = false;
+
+	let deleteRecipeForm: HTMLFormElement;
+	let deleteImageForm: HTMLFormElement;
 </script>
 
 <div class="container mx-auto p-6 max-w-6xl">
@@ -18,8 +24,8 @@
 				<div class="relative h-64">
 					{#if data.recipe.imgId}
 						<img src="/image/{data.recipe.id}" alt={data.recipe.name} class="w-full h-full object-cover" />
-						<form id="delete-img" action="?/deleteImage" method="post" class="absolute top-4 right-4 z-10">
-							<button class="bg-red-500 text-white rounded-full h-8 w-8 flex items-center justify-center text-lg font-bold hover:bg-red-600 transition-colors duration-200">
+						<form bind:this={deleteImageForm} id="delete-img" action="?/deleteImage" method="post" class="absolute top-4 right-4 z-10">
+							<button type="button" on:click={() => isDeleteImageModalOpen = true} class="bg-red-500 text-white rounded-full h-8 w-8 flex items-center justify-center text-lg font-bold hover:bg-red-600 transition-colors duration-200">
 								&times;
 							</button>
 						</form>
@@ -42,8 +48,8 @@
 						<span>Nochmal gemacht</span>
 					</button>
 				</form>
-				<form action="?/delete" method="post">
-					<button class="flex items-center space-x-2 text-red-600 bg-transparent border border-red-500 py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
+				<form bind:this={deleteRecipeForm} action="?/delete" method="post">
+					<button type="button" on:click={() => isDeleteRecipeModalOpen = true} class="flex items-center space-x-2 text-red-600 bg-transparent border border-red-500 py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 							<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm6 2a1 1 0 100 2h1a1 1 0 100-2h-1zm-6 0a1 1 0 100 2h1a1 1 0 100-2H7z" clip-rule="evenodd"/>
 						</svg>
@@ -108,3 +114,19 @@
 </Modal>
 
 <ImageUploadModal bind:open={isImageUploadModalOpen} on:close={() => isImageUploadModalOpen = false} />
+
+<ConfirmationModal 
+	bind:open={isDeleteRecipeModalOpen} 
+	title="Rezept löschen" 
+	message="Bist du sicher, dass du dieses Rezept löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
+	on:confirm={() => deleteRecipeForm.submit()}
+	on:cancel={() => isDeleteRecipeModalOpen = false}
+/>
+
+<ConfirmationModal
+	bind:open={isDeleteImageModalOpen}
+	title="Bild löschen"
+	message="Bist du sicher, dass du dieses Bild löschen möchtest?"
+	on:confirm={() => deleteImageForm.submit()}
+	on:cancel={() => isDeleteImageModalOpen = false}
+/>

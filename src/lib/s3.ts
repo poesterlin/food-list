@@ -1,13 +1,14 @@
+import { env } from '$env/dynamic/private';
 import { S3Client } from 'bun';
 import sharp from 'sharp';
 
 // Bun's S3Client can read from env, but we'll create an explicit client
 // to match the original code's structure.
 const client = new S3Client({
-  endpoint: `http://${process.env.VERSITY_URL}`,
-  accessKeyId: process.env.VERSITY_KEY,
-  secretAccessKey: process.env.VERSITY_SECRET,
-  bucket: process.env.VERSITY_BUCKET,
+  endpoint: env.VERSITY_URL,
+  accessKeyId: env.VERSITY_KEY,
+  secretAccessKey: env.VERSITY_SECRET,
+  bucket: env.VERSITY_BUCKET,
   // For S3-compatible services like VersityGW, region is not strictly
   // necessary but can prevent potential issues.
   region: 'us-east-1',

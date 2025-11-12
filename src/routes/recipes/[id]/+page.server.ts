@@ -66,7 +66,6 @@ export const actions: Actions = {
             const newIngredients = ingredients.map(i => ({ recipe_id: newRecipeId, food_id: i.food_id }));
             await db.insert(ingredientsTable).values(newIngredients);
         });
-
     },
 
     delete: async ({ params, locals }) => {
@@ -93,8 +92,6 @@ export const actions: Actions = {
         const id = z.coerce.number().parse(params.id);
         const form = await request.formData();
         const img = form.get('image');
-
-        console.log({ img });
 
         if (!img || !(img instanceof File)) {
             error(400, "Bad request");
