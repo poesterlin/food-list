@@ -35,7 +35,7 @@
 
 			<div class="flex flex-wrap justify-center gap-4 p-4 bg-white rounded-xl shadow-lg">
 				<form method="post" action="?/duplicate">
-					<button type="submit" class="flex items-center space-x-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-200 shadow-md">
+					<button type="submit" class="flex items-center space-x-2 text-blue-600 bg-transparent border border-blue-500 py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 							<path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 000 2h2a1 1 0 100-2H9z"/>
 						</svg>
@@ -43,14 +43,14 @@
 					</button>
 				</form>
 				<form action="?/delete" method="post">
-					<button class="flex items-center space-x-2 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors duration-200 shadow-md">
+					<button class="flex items-center space-x-2 text-red-600 bg-transparent border border-red-500 py-2 px-4 rounded-lg hover:bg-red-500 hover:text-white transition-colors duration-200">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 							<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm6 2a1 1 0 100 2h1a1 1 0 100-2h-1zm-6 0a1 1 0 100 2h1a1 1 0 100-2H7z" clip-rule="evenodd"/>
 						</svg>
 						<span>Löschen</span>
 					</button>
 				</form>
-				<button on:click={() => isImageUploadModalOpen = true} class="flex items-center space-x-2 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200 shadow-md">
+				<button on:click={() => isImageUploadModalOpen = true} class="flex items-center space-x-2 text-green-600 bg-transparent border border-green-500 py-2 px-4 rounded-lg hover:bg-green-500 hover:text-white transition-colors duration-200">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 						<path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-4 3 3 5-5V15zM9 6a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"/>
 					</svg>

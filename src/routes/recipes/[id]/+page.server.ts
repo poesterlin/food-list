@@ -64,23 +64,20 @@ export const actions: Actions = {
                 .where(eq(ingredientsTable.recipe_id, id));
 
             const newIngredients = ingredients.map(i => ({ recipe_id: newRecipeId, food_id: i.food_id }));
-            await db.insert(ingredientsTable).values(newIngredients).execute();
+            await db.insert(ingredientsTable).values(newIngredients);
         });
 
-        redirect(303, `/recipes/${id}`);
     },
 
     delete: async ({ params, locals }) => {
         const id = z.coerce.number().parse(params.id);
 
         const db = locals.db;
-
         await db.transaction(async (db) => {
-            await db.delete(ingredientsTable).where(eq(ingredientsTable.recipe_id, id)).execute();
-            await db.delete(recipesTable).where(eq(recipesTable.id, id)).execute();
+            await db.delete(ingredientsTable).where(eq(ingredientsTable.recipe_id, id));
+            await db.delete(recipesTable).where(eq(recipesTable.id, id));
         });
 
-        redirect(303, '/recipes');
     },
     add: async ({ params, locals, request }) => {
         const id = z.coerce.number().parse(params.id);
@@ -89,22 +86,25 @@ export const actions: Actions = {
         const db = locals.db;
         const foodId = z.coerce.number().parse(form.get('food_id'));
 
-        await db.insert(ingredientsTable).values({ recipe_id: id, food_id: foodId }).execute();
+        await db.insert(ingredientsTable).values({ recipe_id: id, food_id: foodId });
         redirect(303, `/recipes/${id}`);
     },
     uploadImage: async ({ params, locals, request }) => {
         const id = z.coerce.number().parse(params.id);
         const form = await request.formData();
-        const img = form.getAll('image')[0];
+        const img = form.get('image');
+
+        console.log({ img });
 
         if (!img || !(img instanceof File)) {
             error(400, "Bad request");
         }
 
         const db = locals.db;
-        const imgId = await uploadImage(img);
-        await db.update(recipesTable).set({ imgId }).where(eq(recipesTable.id, id));
-        redirect(303, `/recipes/${id}`);
+        await db.transaction(async (trx) => {
+            const imgId = await uploadImage(img);
+            await trx.update(recipesTable).set({ imgId }).where(eq(recipesTable.id, id));
+        })
     },
     deleteImage: async ({ params, locals }) => {
         const id = z.coerce.number().parse(params.id);
@@ -122,7 +122,6 @@ export const actions: Actions = {
 
         await deleteImage(recipe.imgId);
         await db.update(recipesTable).set({ imgId: null }).where(eq(recipesTable.id, id));
-        redirect(303, `/recipes/${id}`);
     },
 };
 
