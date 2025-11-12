@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async (event) => {
 	const date = new Date(result.date);
 	const daysSince = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-	const session = await event.locals.auth();
+	const session = await event.locals.user;
 	
 	return {
 		daysSince,
