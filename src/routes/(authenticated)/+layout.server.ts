@@ -8,7 +8,5 @@ export const load: LayoutServerLoad = async ({ parent }) => {
     throw redirect(303, '/login');
   }
 
-  console.log(session);
-
   return { session };
 };
