@@ -5,14 +5,14 @@ import { isToday } from 'date-fns';
 import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { PageServerLoad } from "./$types";
+import { db } from "$lib/db-instance";
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ params }) => {
     const { month, year } = z.object({
         month: z.coerce.number().int().min(1).max(12),
         year: z.coerce.number().int().min(2020)
     }).parse(params);
 
-    const db = locals.db;
     const icons = await db
         .select({
             category: iconsTable.category,
@@ -68,22 +68,21 @@ export const actions: Actions = {
         }
         const date = parsedDate.data;
 
-        const [entry] = await locals.db
+        const [entry] = await db
             .select()
             .from(insightsTable)
             .where(eq(insightsTable.date, date.toISOString()));
 
         if (entry) {
             const uniqueIcons = Array.from(new Set([...entry.symptoms, ...iconsIds]).values());
-            await locals.db
+            await db
                 .update(insightsTable)
                 .set({ symptoms: uniqueIcons })
                 .where(eq(insightsTable.date, date.toISOString()));
             return;
         }
 
-        await locals.db
-            .insert(insightsTable)
+        await db.insert(insightsTable)
             .values({
                 date: date.toISOString(),
                 symptoms: iconsIds
@@ -95,12 +94,11 @@ export const actions: Actions = {
         redirect(302, `/insights/${year}/${month}`);
     },
 
-    del: async ({ request, locals }) => {
+    del: async ({ request }) => {
         const form = await request.formData();
         const id = z.coerce.number().parse(form.get('id'));
 
-        await locals.db
-            .delete(insightsTable)
+        await db.delete(insightsTable)
             .where(eq(insightsTable.id, id));
     }
 };

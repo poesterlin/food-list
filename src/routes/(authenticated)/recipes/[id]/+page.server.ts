@@ -4,11 +4,10 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Actions, PageServerLoad } from "./$types";
 import { deleteImage, uploadImage } from '$lib/s3';
+import { db } from "$lib/db-instance";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ params }) => {
     const id = z.coerce.number().parse(params.id);
-
-    const db = locals.db;
 
     const [recipe] = await db
         .select()
@@ -38,11 +37,9 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions: Actions = {
-    duplicate: async ({ params, locals }) => {
+    duplicate: async ({ params }) => {
         // duplicate recipe
         const id = z.coerce.number().parse(params.id);
-
-        const db = locals.db;
 
         const [recipe] = await db
             .select()
@@ -68,27 +65,25 @@ export const actions: Actions = {
         });
     },
 
-    delete: async ({ params, locals }) => {
+    delete: async ({ params }) => {
         const id = z.coerce.number().parse(params.id);
 
-        const db = locals.db;
-        await db.transaction(async (db) => {
-            await db.delete(ingredientsTable).where(eq(ingredientsTable.recipe_id, id));
-            await db.delete(recipesTable).where(eq(recipesTable.id, id));
+        await db.transaction(async (trx) => {
+            await trx.delete(ingredientsTable).where(eq(ingredientsTable.recipe_id, id));
+            await trx.delete(recipesTable).where(eq(recipesTable.id, id));
         });
 
     },
-    add: async ({ params, locals, request }) => {
+    add: async ({ params, request }) => {
         const id = z.coerce.number().parse(params.id);
         const form = await request.formData();
 
-        const db = locals.db;
         const foodId = z.coerce.number().parse(form.get('food_id'));
 
         await db.insert(ingredientsTable).values({ recipe_id: id, food_id: foodId });
         redirect(303, `/recipes/${id}`);
     },
-    uploadImage: async ({ params, locals, request }) => {
+    uploadImage: async ({ params, request }) => {
         const id = z.coerce.number().parse(params.id);
         const form = await request.formData();
         const img = form.get('image');
@@ -97,16 +92,14 @@ export const actions: Actions = {
             error(400, "Bad request");
         }
 
-        const db = locals.db;
         await db.transaction(async (trx) => {
             const imgId = await uploadImage(img);
             await trx.update(recipesTable).set({ imgId }).where(eq(recipesTable.id, id));
         })
     },
-    deleteImage: async ({ params, locals }) => {
+    deleteImage: async ({ params }) => {
         const id = z.coerce.number().parse(params.id);
 
-        const db = locals.db;
         const [recipe] = await db.select().from(recipesTable).where(eq(recipesTable.id, id)).limit(1);
 
         if (!recipe) {

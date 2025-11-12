@@ -1,10 +1,9 @@
 import { desc, eq, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { foodsTable, ingredientsTable } from '$lib/db';
+import { db } from '$lib/db-instance';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const db = locals.db;
-
+export const load: PageServerLoad = async () => {
 	const favorites = await db
 		.select({
 			count: sql`count(*) - 1`.as(`count`),

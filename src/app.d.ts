@@ -12,6 +12,15 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+		interface Session {
+		  user: {
+			id: string;
+			name: string;
+			email: string;
+			image?: string;
+		  };
+		  accessToken?: string;
+		}
 	}
 }
 

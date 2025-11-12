@@ -3,10 +3,9 @@ import { desc, eq, sql } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
 import { fail, redirect } from '@sveltejs/kit';
+import { db } from '$lib/db-instance';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const db = locals.db;
-
+export const load: PageServerLoad = async () => {
 	const categories = await db
 		.select({
 			name: foodsTable.category,
@@ -66,15 +65,15 @@ export const actions: Actions = {
 			return fail(400, { name, date, error: 'No ingredients selected' });
 		}
 
-		const recipe_id = await locals.db.transaction(async (db) => {
-			const [recipe] = await locals.db
+		const recipe_id = await db.transaction(async (trx) => {
+			const [recipe] = await trx
 				.insert(recipesTable)
 				.values({ name, date: date.toISOString() })
 				.returning();
 			const recipe_id = recipe.id;
 
 			const ingredients = uniqueIngredients.map((food_id) => ({ food_id, recipe_id }));
-			await db.insert(ingredientsTable).values(ingredients).execute();
+			await trx.insert(ingredientsTable).values(ingredients).execute();
 			return recipe_id;
 		});
 

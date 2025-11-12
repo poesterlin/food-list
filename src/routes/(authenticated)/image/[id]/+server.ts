@@ -4,11 +4,11 @@ import { eq } from "drizzle-orm";
 import { getImageResponseStream } from "$lib/s3";
 import type { RequestHandler } from './$types';
 import { redirect } from "@sveltejs/kit";
+import { db } from "$lib/db-instance";
 
-export const GET: RequestHandler = async ({ params, locals }) => {
+export const GET: RequestHandler = async ({ params }) => {
     const id = z.coerce.number().parse(params.id);
 
-    const db = locals.db;
     const [recipe] = await db
         .select()
         .from(recipesTable)

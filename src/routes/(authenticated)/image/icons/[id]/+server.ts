@@ -3,13 +3,13 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { RequestHandler } from './$types';
 import { read } from '$app/server';
+import { db } from "$lib/db-instance";
 
 const icons = import.meta.glob('./icons/*.png', { query: '?url', import: "default", eager: true });
 
-export const GET: RequestHandler = async ({ params, locals }) => {
+export const GET: RequestHandler = async ({ params }) => {
     const id = z.coerce.number().parse(params.id);
 
-    const db = locals.db;
     const [icon] = await db
         .select()
         .from(iconsTable)

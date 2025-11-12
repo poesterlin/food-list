@@ -3,12 +3,9 @@ import { json } from '@sveltejs/kit';
 import { z } from 'zod';
 import { foodsTable, ingredientsTable, recipesTable } from '$lib/db';
 import { desc, eq, sql } from 'drizzle-orm';
+import { db } from '$lib/db-instance';
 
-export const GET: RequestHandler = async ({ locals, url }) => {
-	const params = url.searchParams as URLSearchParams;
-
-	const db = locals.db;
-
+export const GET: RequestHandler = async () => {
 	const recipes = await db
 		.select({
 			id: recipesTable.id,
