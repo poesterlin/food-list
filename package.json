@@ -46,6 +46,7 @@
     "drizzle-kit": "^0.21.2",
     "drizzle-orm": "^0.30.10",
     "esbuild-register": "^3.5.0",
+    "jose": "^6.1.1",
     "minio": "^8.0.0",
     "postgres": "^3.4.4",
     "sharp": "^0.33.4",
