@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { RequestHandler } from './$types';
 import { read } from '$app/server';
 
-const icons = import.meta.glob('./icons/*.png', { as: 'url', eager: true });
+const icons = import.meta.glob('./icons/*.png', { query: '?url', import: "default", eager: true });
 
 export const GET: RequestHandler = async ({ params, locals }) => {
     const id = z.coerce.number().parse(params.id);
@@ -21,5 +21,5 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     }
 
     const url = icons['./' + icon.url];
-    return read(url);
+    return read(url as string);
 }

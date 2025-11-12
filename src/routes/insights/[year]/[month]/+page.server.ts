@@ -1,6 +1,6 @@
 import { iconsTable, insightsTable, type Icon } from "$lib/db";
 import { mod } from '$lib/math';
-import { fail, type Actions } from "@sveltejs/kit";
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { isToday } from 'date-fns';
 import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -87,7 +87,12 @@ export const actions: Actions = {
             .values({
                 date: date.toISOString(),
                 symptoms: iconsIds
-            })
+            });
+
+
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        redirect(302, `/insights/${year}/${month}`);
     },
 
     del: async ({ request, locals }) => {
