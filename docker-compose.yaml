@@ -8,9 +8,8 @@ services:
       - traefik_web
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.foods.rule=Host(`foods.homelab`, `foods.oesterlin.dev`)'
+      - 'traefik.http.routers.foods.rule=Host(`foods.oesterlin.dev`)'
       - 'traefik.http.services.foods.loadbalancer.server.port=3000'
-      - 'traefik.http.middlewares.foods.compress=true'
     environment:
       - POSTGRES_CONNECTION_STRING=postgresql://postgres:password@postgres:5432/food_db
 

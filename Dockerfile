@@ -1,11 +1,11 @@
 FROM oven/bun
 WORKDIR /app
 
-COPY bun.lockb package.json .
+COPY bun.lock package.json .
 
 RUN bun i
 
-ADD . ./
+COPY . .
 RUN bun run build
 
 EXPOSE 3000
