@@ -8,75 +8,49 @@
 
 </script>
 
-<main>
-	<h1>Zutat hinzufügen</h1>
-	<form action="?/add" method="post">
-		<label for="name">Zutat</label>
-		<input type="text" placeholder="Name" name="name" id="name" required/>
-		<label for="category">Kategorie</label>
-		<select name={selectName} id="category" required bind:value={category}>
-			{#each data.categories as { category }}
-				<option value={category}>
-					{category}
-				</option>
-			{/each}
-			<option value="other">Andere</option>
-		</select>
+<div class="flex flex-col items-center py-8">
+	<h1 class="text-3xl font-bold text-pink-600 mb-6">Zutat hinzufügen</h1>
+	<form action="?/add" method="post" class="w-full max-w-md bg-white p-6 rounded-xl shadow-lg space-y-4">
+		<div>
+			<label for="name" class="block text-gray-700 text-sm font-medium mb-1">Zutat</label>
+			<input type="text" placeholder="Name" name="name" id="name" required
+				class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition duration-200"
+			/>
+		</div>
+		
+		<div>
+			<label for="category" class="block text-gray-700 text-sm font-medium mb-1">Kategorie</label>
+			<select name={selectName} id="category" required bind:value={category}
+				class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition duration-200"
+			>
+				{#each data.categories as { category }}
+					<option value={category}>
+						{category}
+					</option>
+				{/each}
+				<option value="other">Andere</option>
+			</select>
+		</div>
 
 		{#if isOther}
-			<label for="category">Kategorie</label>
-			<input type="text" placeholder="Neue Kategorie" name={inputName} id="category" required/>
+			<div>
+				<label for="category" class="block text-gray-700 text-sm font-medium mb-1">Neue Kategorie</label>
+				<input type="text" placeholder="Neue Kategorie" name={inputName} id="category" required
+					class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition duration-200"
+				/>
+			</div>
 		{/if}
 
-
-		<div class="center">
-			<label for="allowed">Potentiell Riskant</label>
-			<input type="checkbox" name="allowed" id="allowed" />
+		<div class="flex items-center justify-between py-2">
+			<label for="allowed" class="text-gray-700 text-sm font-medium">Potentiell Riskant</label>
+			<input type="checkbox" name="allowed" id="allowed" 
+				class="form-checkbox h-5 w-5 text-pink-500 rounded focus:ring-pink-400"
+			/>
 		</div>
-		<button type="submit">Hinzufügen</button>
+		<button type="submit" class="w-full bg-pink-500 text-white py-3 px-4 rounded-lg font-semibold text-lg 
+			hover:bg-pink-600 transition duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75"
+		>
+			Hinzufügen
+		</button>
 	</form>
-</main>
-
-<style>
-	main {
-		padding: 1.7rem;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	form {
-		width: 100%;
-		max-width: 300px;
-		display: flex;
-		flex-direction: column;
-	}
-
-	label {
-		display: block;
-		margin-bottom: 0.5rem;
-	}
-
-	input,
-	select {
-		width: 100%;
-		padding: 0.5rem;
-		margin-bottom: 1rem;
-	}
-
-	button {
-		color: white;
-		background-color: #007bff;
-		border: none;
-		border-radius: 0.25rem;
-		padding: 0.5rem 1rem;
-		margin-top: 1rem;
-	}
-
-	.center {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		align-items: center;
-		padding-right: 0.1rem;
-	}
-</style>
+</div>

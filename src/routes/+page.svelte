@@ -17,39 +17,62 @@
 	}
 </script>
 
-<main>
-	<form method="post" use:enhance>
-		<label for="name"><h1>Gericht</h1></label>
-		<input type="text" placeholder="Name" name="name" id="name" value={form?.name ?? ''} />
-		<input type="date" name="date" id="date" value={form?.date ?? getTodayDateValue()} />
+<div class="flex flex-col items-center py-8">
+	<form method="post" use:enhance class="w-full max-w-md bg-white p-6 rounded-xl shadow-lg space-y-6">
+		<h1 class="text-3xl font-bold text-pink-600 text-center mb-6">Gericht eintragen</h1>
+		
+		<div>
+			<label for="name" class="block text-gray-700 text-sm font-medium mb-1">Name des Gerichts</label>
+			<input 
+				type="text" 
+				placeholder="Name" 
+				name="name" 
+				id="name" 
+				value={form?.name ?? ''} 
+				class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition duration-200"
+			/>
+		</div>
+
+		<div>
+			<label for="date" class="block text-gray-700 text-sm font-medium mb-1">Datum</label>
+			<input 
+				type="date" 
+				name="date" 
+				id="date" 
+				value={form?.date ?? getTodayDateValue()} 
+				class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition duration-200"
+			/>
+		</div>
 
 		{#if form?.error}
-			<p class="error">{form.error}</p>
+			<p class="text-red-500 text-sm text-center bg-red-100 p-2 rounded-md">{form.error}</p>
 		{/if}
 
-		<h2>Zutaten:</h2>
-		<details>
-			<summary>Favouriten</summary>
-			<ul>
+		<h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4">Zutaten auswählen:</h2>
+		
+		<details class="bg-blue-50 p-4 rounded-lg shadow-sm cursor-pointer">
+			<summary class="text-lg font-semibold text-blue-700 hover:text-blue-900 transition duration-200">Favouriten</summary>
+			<ul class="mt-3 space-y-2">
 				{#each data.favorites as food}
 					<li>
-						<label>
-							<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} />
-							{food.name}
+						<label class="flex items-center text-gray-700 cursor-pointer">
+							<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} class="form-checkbox h-5 w-5 text-pink-500 rounded focus:ring-pink-400" />
+							<span class="ml-2">{food.name}</span>
 						</label>
 					</li>
 				{/each}
 			</ul>
 		</details>
+
 		{#each data.categories as category}
-			<details>
-				<summary>{category.name}</summary>
-				<ul>
+			<details class="bg-purple-50 p-4 rounded-lg shadow-sm cursor-pointer">
+				<summary class="text-lg font-semibold text-purple-700 hover:text-purple-900 transition duration-200">{category.name}</summary>
+				<ul class="mt-3 space-y-2">
 					{#each category.list as food}
 						<li>
-							<label class:risky={!food.allowed}>
-								<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} />
-								{food.name}
+							<label class="flex items-center text-gray-700 cursor-pointer {food.allowed ? '' : 'text-orange-500 font-medium'}">
+								<input type="checkbox" name="food_{food.id}" bind:checked={value[food.id]} class="form-checkbox h-5 w-5 text-pink-500 rounded focus:ring-pink-400" />
+								<span class="ml-2">{food.name}</span>
 							</label>
 						</li>
 					{/each}
@@ -57,74 +80,12 @@
 			</details>
 		{/each}
 
-		<button type="submit">Eintragen</button>
+		<button 
+			type="submit" 
+			class="w-full bg-pink-500 text-white py-3 px-4 rounded-lg font-semibold text-lg 
+				hover:bg-pink-600 transition duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75"
+		>
+			Eintragen
+		</button>
 	</form>
-</main>
-
-<style>
-	main {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	form {
-		display: flex;
-		flex-direction: column;
-	}
-
-	label {
-		width: 100%;
-	}
-
-	input[type='text'],
-	input[type='date'] {
-		width: 100%;
-		padding: 0.5rem;
-		margin: 0.5rem 0;
-	}
-
-	input[type='checkbox'] {
-		margin-right: 0.5rem;
-	}
-
-	details {
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
-
-	summary {
-		font-size: 1.25rem;
-	}
-
-	ul {
-		list-style: none;
-		padding: 0;
-	}
-
-	li {
-		display: flex;
-		align-items: center;
-		margin-bottom: 0.1rem;
-	}
-
-	button {
-		margin-top: 3rem;
-		width: 100%;
-		color: white;
-		background-color: #007bff;
-		border: none;
-		border-radius: 0.25rem;
-		padding: 0.5rem 1rem;
-		cursor: pointer;
-	}
-
-	.error {
-		color: red;
-	}
-
-	.risky {
-		color: rgb(241, 157, 0);
-	}
-</style>
+</div>

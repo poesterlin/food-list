@@ -7,55 +7,26 @@
 	export let data;
 </script>
 
-<header>
-	<nav>
-		<a href="/" class:current={currentPath === '/'}>Eintragen</a>
-		<a href="/recipes" class:current={currentPath === '/recipes'}>Gerichte</a>
-		<a href="/ingredients" class:current={currentPath === '/ingredients'}>Zutaten</a>
-		<a href="/analysis" class:current={currentPath === '/analysis'}>Auswertung</a>
-		<a href="insights" class:current={currentPath === '/insights'}>Erkenntnisse</a>
-	</nav>
+<div class="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 font-sans text-gray-800">
+	<header class="bg-white p-4 shadow-md flex items-center justify-between rounded-b-xl">
+		<nav class="flex space-x-4">
+			<a href="/" class="px-4 py-2 rounded-lg transition-colors duration-200 
+				{currentPath === '/' ? 'bg-pink-300 text-pink-800 font-semibold shadow-sm' : 'text-gray-600 hover:bg-pink-100 hover:text-pink-700'}">Eintragen</a>
+			<a href="/recipes" class="px-4 py-2 rounded-lg transition-colors duration-200 
+				{currentPath === '/recipes' ? 'bg-pink-300 text-pink-800 font-semibold shadow-sm' : 'text-gray-600 hover:bg-pink-100 hover:text-pink-700'}">Gerichte</a>
+			<a href="/ingredients" class="px-4 py-2 rounded-lg transition-colors duration-200 
+				{currentPath === '/ingredients' ? 'bg-pink-300 text-pink-800 font-semibold shadow-sm' : 'text-gray-600 hover:bg-pink-100 hover:text-pink-700'}">Zutaten</a>
+			<a href="/analysis" class="px-4 py-2 rounded-lg transition-colors duration-200 
+				{currentPath === '/analysis' ? 'bg-pink-300 text-pink-800 font-semibold shadow-sm' : 'text-gray-600 hover:bg-pink-100 hover:text-pink-700'}">Auswertung</a>
+			<a href="/insights" class="px-4 py-2 rounded-lg transition-colors duration-200 
+				{currentPath === '/insights' ? 'bg-pink-300 text-pink-800 font-semibold shadow-sm' : 'text-gray-600 hover:bg-pink-100 hover:text-pink-700'}">Erkenntnisse</a>
+		</nav>
 
-	<b>Tag {data.daysSince}!</b>
-</header>
+		<b class="text-lg font-bold text-pink-600">Tag {data.daysSince}!</b>
+	</header>
 
-<slot />
+	<main class="container mx-auto p-6">
+		<slot />
+	</main>
+</div>
 
-<style>
-	:global(body) {
-		font-family: Arial, sans-serif;
-		margin: 0;
-		padding: 0;
-	}
-
-	:global(h1) {
-		font-size: 1.5rem;
-		margin-top: 0.6rem;
-	}
-
-	:global(*) {
-		box-sizing: border-box;
-	}
-
-	header {
-		background-color: #96c8f9;
-		padding: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	nav {
-		display: flex;
-		gap: 2%;
-	}
-
-	a {
-		text-decoration: none;
-		color: black;
-	}
-
-	a.current {
-		font-weight: bold;
-	}
-</style>

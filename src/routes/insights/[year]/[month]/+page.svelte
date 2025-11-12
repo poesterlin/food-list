@@ -24,253 +24,101 @@
 	];
 </script>
 
-<main>
-	<details>
-		<summary>Eintragen</summary>
-		<form action="?/create" method="post">
-			<fieldset>
+<div class="container mx-auto p-4 max-w-5xl">
+	<details class="bg-white p-6 rounded-xl shadow-lg mb-8">
+		<summary class="text-2xl font-semibold text-pink-600 cursor-pointer hover:text-pink-700 transition duration-200">
+			Symptom eintragen
+		</summary>
+		<form action="?/create" method="post" class="mt-6 space-y-4">
+			<fieldset class="border-none p-0 max-h-64 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
 				{#each data.icons as { list }}
 					{#each list as icon}
-						<label class="symptom">
-							<input type="checkbox" name="icon_{icon.id}" hidden />
-							<img
-								class="background"
-								src="/image/icons/{icon.id}"
-								alt="icon"
-								width="62"
-								height="62"
-							/>
-							<span>{icon.name}</span>
+						<label class="flex items-center space-x-2 p-2 rounded-lg cursor-pointer hover:bg-gray-100 symptom-label">
+							<input type="checkbox" name="icon_{icon.id}" hidden class="symptom-checkbox" />
+							<div class="relative w-12 h-12 flex-shrink-0">
+								<img
+									class="w-full h-full object-contain rounded-full bg-blue-100 p-1 transition-all duration-200 symptom-img"
+									src="/image/icons/{icon.id}"
+									alt="icon"
+								/>
+							</div>
+							<span class="text-gray-700 font-medium symptom-name">{icon.name}</span>
 						</label>
 					{/each}
 				{/each}
 			</fieldset>
 
-			<label for="date">Datum</label>
-			<input type="date" id="date" name="date" value={getTodayDateValue()} required />
-			<button type="submit">Eintragen</button>
+			<div>
+				<label for="date" class="block text-gray-700 text-sm font-medium mb-1">Datum</label>
+				<input type="date" id="date" name="date" value={getTodayDateValue()} required
+					class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition duration-200"
+				/>
+			</div>
+			<button type="submit" class="w-full bg-pink-500 text-white py-3 px-4 rounded-lg font-semibold text-lg 
+				hover:bg-pink-600 transition duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75"
+			>
+				Eintragen
+			</button>
 		</form>
 	</details>
 
-	<h1 class="space-between">
+	<h1 class="flex justify-between items-center text-3xl font-bold text-blue-600 mb-6">
 		Kalender
-		<div>
-			<span>{fixedMonth}</span>
-			{year}
+		<div class="flex items-baseline space-x-2">
+			<span class="text-pink-500">{fixedMonth}</span>
+			<span>{year}</span>
 		</div>
 	</h1>
-	<div id="nav" class="space-between">
-		<a rel="prefetch" href={prev}>
-			<button>&lt;</button>
+	<div id="nav" class="flex justify-between mb-8">
+		<a rel="prefetch" href={prev} class="bg-blue-200 text-blue-700 p-2 rounded-full hover:bg-blue-300 transition-colors duration-200">
+			<button class="font-bold text-xl">&lt;</button>
 		</a>
-		<a rel="prefetch" href={next}>
-			<button>&gt;</button>
+		<a rel="prefetch" href={next} class="bg-blue-200 text-blue-700 p-2 rounded-full hover:bg-blue-300 transition-colors duration-200">
+			<button class="font-bold text-xl">&gt;</button>
 		</a>
 	</div>
-	<div id="calender">
+	<div id="calender" class="grid grid-cols-1 sm:grid-cols-7 gap-2">
 		{#each daysOfWeek as day}
-			<div class="names mobile-hide">{day}</div>
+			<div class="text-center font-semibold text-gray-600 py-2 sm:block hidden">{day}</div>
 		{/each}
 		{#each new Array(data.offset).fill(1) as _}
-			<div class="grey mobile-hide" />
+			<div class="bg-gray-100 rounded-lg p-2 sm:block hidden" />
 		{/each}
 		{#each data.days as day}
-			<div id="day" class:today={day.today} class:mobile-hide={day.symptoms === undefined}>
-				<b>{day.date}</b>
-				<div class="symptoms">
+			<div id="day" class="relative bg-white rounded-lg shadow-sm p-3 min-h-[120px] flex flex-col 
+				{day.today ? 'border-2 border-pink-500 shadow-md' : 'border border-gray-200'}
+				{day.symptoms === undefined ? 'sm:hidden hidden' : ''}"
+			>
+				<b class="text-lg font-bold text-gray-800 text-center mb-2">{day.date}</b>
+				<div class="flex-grow grid grid-cols-3 gap-1 justify-items-center items-center">
 					{#if day.symptoms}
 						{#each day.symptoms as e}
-							<img class="grid-img" src="/image/icons/{e}" alt="icon" />
+							<img class="w-8 h-8 object-contain" src="/image/icons/{e}" alt="icon" />
 						{:else}
-							<p class="no-symptoms">Keine Symptome 🥳</p>
+							<p class="text-gray-500 text-sm col-span-3 text-center">Keine Symptome 🥳</p>
 						{/each}
 					{/if}
 				</div>
 				{#if day.symptoms !== undefined}
-					<form action="?/del" method="post">
+					<form action="?/del" method="post" class="absolute top-1 right-1">
 						<input type="hidden" name="id" value={day.id} hidden />
-						<button class="clear-btn" type="submit"> &times; </button>
+						<button class="bg-red-400 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm hover:bg-red-500 transition-colors duration-200">
+							&times;
+						</button>
 					</form>
 				{/if}
 			</div>
 		{/each}
 	</div>
-</main>
+</div>
 
 <style>
-	main {
-		/* display: flex;
-		flex-direction: column;
-		align-items: center; */
-		padding: 1rem;
+	.symptom-checkbox:checked + .symptom-img {
+		background-color: #fbcfe8; /* pink-200 */
+		filter: none;
 	}
-
-	form {
-		display: flex;
-		flex-direction: column;
-	}
-
-	details {
-		margin-bottom: 1rem;
-		width: min(100%, 400px);
-		margin: auto;
-	}
-
-	input[type='date'] {
-		width: 100%;
-		padding: 0.5rem;
-		margin: 0.5rem 0 2rem;
-	}
-
-	input[type='checkbox'] {
-		margin-right: 0.5rem;
-	}
-
-	button {
-		width: 100%;
-		color: white;
-		background-color: #007bff;
-		border: none;
-		border-radius: 0.25rem;
-		padding: 0.5rem 1rem;
-		cursor: pointer;
-	}
-
-	img.background {
-		background: #264f2f;
-	}
-
-	.symptom {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin: 0.5rem 0;
-	}
-
-	.symptom > input:checked + img {
-		background: #077cdb;
-		filter: invert(1);
-	}
-
-	.symptom > input:checked + img + span {
+	.symptom-checkbox:checked + .symptom-img + .symptom-name {
 		font-weight: bold;
-	}
-
-	fieldset {
-		border: none;
-		padding: 0.5rem 2rem;
-		margin-bottom: 1rem;
-		max-height: 30vh;
-		overflow-y: auto;
-	}
-
-	.space-between {
-		display: flex;
-		justify-content: space-between;
-	}
-
-	#nav {
-		margin: 10px 0px 50px;
-	}
-
-	#calender > div {
-		margin: 3px;
-	}
-
-	#calender {
-		display: grid;
-		grid-template-columns: repeat(7, 1fr);
-		width: 100%;
-	}
-
-	@media (max-width: 600px) {
-		.mobile-hide {
-			display: none !important;
-		}
-
-		#calender {
-			grid-template-columns: repeat(1, 1fr);
-		}
-	}
-
-	#day {
-		position: relative;
-		display: block;
-		border: 1px solid #949494;
-		margin: 3px;
-		background: rgb(73, 73, 73);
-		min-height: 100px;
-	}
-
-	b {
-		display: inline-block;
-		width: 100%;
-		text-align: center;
-		color: white;
-		padding-top: 2px;
-	}
-
-	.grey {
-		border: 1px solid #c0c0c0 !important;
-		background: #e6e6e6;
-	}
-
-	.names {
-		height: 30px;
-		text-align: center;
-		font-weight: bold;
-		color: #363636;
-	}
-
-	a {
-		text-decoration: none;
-	}
-
-	span {
-		color: #ff5e2a;
-	}
-
-	#day.today {
-		border: 2px solid #ff5e2a;
-		box-shadow: 1px 2px #797979;
-	}
-
-	.clear-btn {
-		position: absolute;
-		top: -10px;
-		right: -10px;
-		z-index: 1;
-		background: #ff5e2a;
-		color: white;
-		border: none;
-		border-radius: 50%;
-		width: 30px;
-		height: 30px;
-		cursor: pointer;
-		text-align: center;
-		padding: 0px;
-		padding-left: 2px;
-		font-size: 1.5rem;
-	}
-
-	.symptoms {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-		gap: 5px;
-		padding: 5px;
-		justify-items: center;
-	}
-
-	.grid-img {
-		width: 50px;
-		height: 50px;
-		object-fit: contain;
-	}
-
-	.no-symptoms {
-		color: white;
-		text-align: center;
-		width: 100%;
-		grid-column: 1 / -1;
+		color: #db2777; /* pink-700 */
 	}
 </style>

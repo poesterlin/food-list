@@ -2,51 +2,32 @@
 	export let data;
 </script>
 
-<main>
-	<table>
-		<thead>
-			<tr>
-				<th>Zutat</th>
-				<th>Verwendet</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each data.favorites as { name, count }}
+<div class="container mx-auto p-6 max-w-md">
+	<h1 class="text-3xl font-bold text-pink-600 text-center mb-6">Zutaten Analyse</h1>
+	<div class="bg-white rounded-xl shadow-lg overflow-hidden">
+		<table class="min-w-full divide-y divide-gray-200">
+			<thead class="bg-blue-100">
 				<tr>
-					<td>{name}</td>
-					<td>{count}</td>
+					<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
+						Zutat
+					</th>
+					<th scope="col" class="px-6 py-3 text-right text-xs font-medium text-blue-700 uppercase tracking-wider">
+						Verwendet
+					</th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
-</main>
-
-<style>
-	main {
-        max-width: min(90vw, 500px);
-        margin: 2rem auto;
-	}
-
-	table {
-        margin: auto;
-		border-collapse: collapse;
-	}
-
-	th,
-	td {
-		border: 1px solid black;
-		padding: 0.5rem;
-	}
-
-	th {
-		background-color: #f0f0f0;
-	}
-
-    tr:nth-child(even) {
-        background-color: #f0f0f0;
-    }
-
-    td:nth-child(2) {
-        text-align: right;
-    }
-</style>
+			</thead>
+			<tbody class="bg-white divide-y divide-gray-200">
+				{#each data.favorites as { name, count }}
+					<tr class="hover:bg-gray-50">
+						<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+							{name}
+						</td>
+						<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
+							{count}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+</div>
