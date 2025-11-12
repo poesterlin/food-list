@@ -1,13 +1,12 @@
-FROM node:20-slim
+FROM oven/bun
 WORKDIR /app
 
-# pnpm fetch does require only lockfile
-COPY pnpm-lock.yaml ./
+COPY bun.lockb package.json .
 
-RUN npm i -g pnpm && pnpm fetch
+RUN bun i
 
 ADD . ./
-RUN pnpm install -r --offline && pnpm run build
+RUN bun run build
 
 EXPOSE 3000
 
@@ -15,4 +14,4 @@ EXPOSE 3000
 ENV BODY_SIZE_LIMIT=15000000
 ENV NODE_ENV=production
 
-CMD ["node", "build/index.js"]
+CMD ["bun", "build/index.js"]

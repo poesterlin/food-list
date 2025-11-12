@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { formatDate } from '$lib/date-helper.js';
+	import Modal from '$lib/Modal.svelte';
 
 	export let data;
 
 	let uploadEl: HTMLInputElement;
+	let isAddIngredientModalOpen = false;
 
 	function openFile() {
 		uploadEl.click();
@@ -74,7 +76,12 @@
 		<!-- Right Column: Ingredients and Add Ingredient Form -->
 		<div class="md:col-span-2">
 			<section class="bg-white p-6 rounded-xl shadow-lg mb-8">
-				<h2 class="text-2xl font-semibold text-pink-600 mb-4">Zutaten:</h2>
+				<div class="flex justify-between items-center mb-4">
+					<h2 class="text-2xl font-semibold text-pink-600">Zutaten:</h2>
+					<button on:click={() => isAddIngredientModalOpen = true} class="bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors duration-200 shadow-md">
+						Hinzufügen
+					</button>
+				</div>
 				<ul class="space-y-3 text-gray-700">
 					{#each data.ingredients as ingredient}
 						<li class="flex items-center justify-between bg-gray-50 p-3 rounded-lg shadow-sm">
@@ -91,23 +98,25 @@
 					{/each}
 				</ul>
 			</section>
-
-			<section class="bg-white p-6 rounded-xl shadow-lg">
-				<h2 class="text-2xl font-semibold text-blue-600 mb-4">Zutat hinzufügen:</h2>
-				<form action="?/add" method="post" class="flex flex-col sm:flex-row gap-4">
-					<select name="food_id" id="food_id" required value="" 
-						class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200"
-					>
-						<option value="" selected disabled> Zutat auswählen </option>
-						{#each data.allIngredients as ingredient}
-							<option value={ingredient.id}>{ingredient.name}</option>
-						{/each}
-					</select>
-					<button type="submit" class="bg-purple-500 text-white py-3 px-6 rounded-lg hover:bg-purple-600 transition-colors duration-200 shadow-md">
-						Hinzufügen
-					</button>
-				</form>
-			</section>
 		</div>
 	</div>
 </div>
+
+<Modal bind:open={isAddIngredientModalOpen} on:close={() => isAddIngredientModalOpen = false}>
+	<div slot="title">Zutat hinzufügen</div>
+	<div slot="content">
+		<form action="?/add" method="post" class="flex flex-col sm:flex-row gap-4">
+			<select name="food_id" id="food_id" required value="" 
+				class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200"
+			>
+				<option value="" selected disabled> Zutat auswählen </option>
+				{#each data.allIngredients as ingredient}
+					<option value={ingredient.id}>{ingredient.name}</option>
+				{/each}
+			</select>
+			<button type="submit" class="bg-purple-500 text-white py-3 px-6 rounded-lg hover:bg-purple-600 transition-colors duration-200 shadow-md">
+				Hinzufügen
+			</button>
+		</form>
+	</div>
+</Modal>
