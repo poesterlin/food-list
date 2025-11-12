@@ -28,9 +28,7 @@
 	<div class="mx-auto max-w-4xl">
 		<!-- Symptom Entry Form -->
 		<details class="mb-10 rounded-3xl bg-white p-6 shadow-sm">
-			<summary
-				class="summary-marker-pink list-none cursor-pointer text-lg font-medium"
-			>
+			<summary class="summary-marker-pink cursor-pointer list-none text-lg font-medium">
 				Symptom eintragen
 			</summary>
 			<form action="?/create" method="post" class="mt-6 space-y-8">
@@ -67,7 +65,7 @@
 						name="date"
 						value={getTodayDateValue()}
 						required
-						class="w-full max-w-xs rounded-lg border-slate-200 p-3 text-slate-700 transition duration-200 ring-1 ring-pink-200 focus:ring-pink-400 focus:outline-none"
+						class="w-full max-w-xs rounded-lg border-slate-200 p-3 text-slate-700 ring-1 ring-pink-200 transition duration-200 focus:ring-pink-400 focus:outline-none"
 					/>
 				</div>
 				<button
@@ -114,7 +112,11 @@
 				<div />
 			{/each}
 			{#each data.days as day}
-				<div class="day-cell" class:today={day.today} class:mobile-hide={day.symptoms === undefined}>
+				<div
+					class="day-cell"
+					class:today={day.today}
+					class:mobile-hide={day.symptoms === undefined}
+				>
 					<b>{day.date}</b>
 					<div class="symptoms">
 						{#if day.symptoms}
@@ -220,13 +222,13 @@
 		gap: 6px;
 		padding-top: 4px;
 	}
-	
+
 	.grid-img {
 		width: 40px;
 		height: 40px;
 		object-fit: contain;
 		/* Apply filter to make white icon visible on light background */
-		filter: brightness(0.7) invert(0.2);
+		filter: brightness(0) invert(0.1);
 	}
 
 	/* Hide delete button by default for a cleaner look */
