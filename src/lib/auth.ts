@@ -8,7 +8,7 @@ const jwks = createRemoteJWKSet(
 )
 
 export async function getTailscaleIdToken(code: string) {
-    const host = dev ? `http://localhost:5173` : env.HOST
+    const host = dev ? `http://localhost:5173` : env.URL;
 
     const response = await fetch(`${env.TSIDP_ISSUER}/token`, {
         method: "POST",
@@ -35,7 +35,7 @@ export function generateState(): string {
 }
 
 export function getTailscaleAuthUrl(state: string): string {
-    const host = dev ? `http://localhost:5173` : env.HOST
+    const host = dev ? `http://localhost:5173` : env.URL;
 
     const params = new URLSearchParams({
         client_id: env.TSIDP_CLIENT_ID,
