@@ -2,16 +2,12 @@
 	import { enhance } from '$app/forms';
 	import { formatDate } from '$lib/date-helper.js';
 	import Modal from '$lib/Modal.svelte';
+	import ImageUploadModal from '$lib/ImageUploadModal.svelte';
 
 	export let data;
 
-	let uploadEl: HTMLInputElement;
 	let isAddIngredientModalOpen = false;
-
-	function openFile() {
-		uploadEl.click();
-		uploadEl.addEventListener('change', () => uploadEl.form!.submit());
-	}
+	let isImageUploadModalOpen = false;
 </script>
 
 <div class="container mx-auto p-6 max-w-6xl">
@@ -54,17 +50,7 @@
 						<span>Löschen</span>
 					</button>
 				</form>
-				<form
-					action="?/uploadImage"
-					method="post"
-					use:enhance
-					enctype="multipart/form-data"
-					class="hidden"
-				>
-					<input bind:this={uploadEl} type="file" name="image" accept="image/*" required hidden />
-					<button type="submit" hidden>Hochladen</button>
-				</form>
-				<button on:click={openFile} class="flex items-center space-x-2 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200 shadow-md">
+				<button on:click={() => isImageUploadModalOpen = true} class="flex items-center space-x-2 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200 shadow-md">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 						<path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-4 3 3 5-5V15zM9 6a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"/>
 					</svg>
@@ -120,3 +106,5 @@
 		</form>
 	</div>
 </Modal>
+
+<ImageUploadModal bind:open={isImageUploadModalOpen} on:close={() => isImageUploadModalOpen = false} />

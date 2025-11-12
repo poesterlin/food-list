@@ -3,6 +3,7 @@ import { recipesTable } from "$lib/db";
 import { eq } from "drizzle-orm";
 import { getImageResponseStream } from "$lib/s3";
 import type { RequestHandler } from './$types';
+import { redirect } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
     const id = z.coerce.number().parse(params.id);
@@ -17,7 +18,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     const imgId = recipe.imgId;
 
     if (!imgId) {
-        return new Response();
+        redirect(302, "/placeholder.svg");
     }
 
     return getImageResponseStream(imgId);
